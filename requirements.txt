@@ -1,0 +1,8 @@
+pymatgen
+ase
+matplotlib==3.9.4
+numpy~=2.2.2
+sympy==1.8.0
+setuptools
+scikit-image
+biopython
