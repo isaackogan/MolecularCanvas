@@ -168,19 +168,29 @@ class Canvas:
         :param orientation: Rotation angles (in degrees) around x, y, and z axes
         """
         structure = Structure.Structure(name)
-        model = Model.Model(0)
+        model_index = 0
+        model = Model.Model(model_index)
         structure.add(model)
+
+        chain_ids = [chr(i) for i in range(65, 91)]  # 'A' to 'Z'
+        chain_index = 0
 
         rotation = Rotation.from_euler(seq='xyz', angles=orientation, degrees=True)
         atom_serial = 1
-
         possible_residues = ['ALA', 'GLY', 'SER', 'THR', 'LEU', 'VAL', 'ILE', 'PRO', 'MET']
 
         with open(output_path, "w") as pdb_file:
-            for chain_index, coordinates in enumerate(self.coordinates):
-                chain_id = chr(65 + chain_index % 26)  # Use A-Z as chain identifiers
+            for coordinates in self.coordinates:
+                if chain_index >= len(chain_ids):  # When all chains are used, create a new model
+                    chain_index = 0
+                    model_index += 1
+                    model = Model.Model(model_index)
+                    structure.add(model)
+
+                chain_id = chain_ids[chain_index]
                 chain = Chain.Chain(chain_id)
                 model.add(chain)
+                chain_index += 1  # Move to the next chain ID
 
                 prev_atom_index = None
 
@@ -200,7 +210,8 @@ class Canvas:
                                      element='C')
                     residue.add(atom)
                     chain.add(residue)
-                    pdb_file.write(f"HETATM{atom_serial:5} C   {res_name} {chain_id}{atom_serial:4}    {rotated_coord[0]:8.3f}{rotated_coord[1]:8.3f}{rotated_coord[2]:8.3f}  1.00  0.00           C  \n")
+                    pdb_file.write(f"HETATM{atom_serial:5} C   {res_name} {chain_id}{atom_serial:4}    "
+                                   f"{rotated_coord[0]:8.3f}{rotated_coord[1]:8.3f}{rotated_coord[2]:8.3f}  1.00  0.00           C  \n")
 
                     if prev_atom_index is not None:
                         # Create a bond between the previous and current atom
@@ -215,3 +226,7 @@ class Canvas:
         io.set_structure(structure)
         io.save(output_path)
         print(f"Structure saved to {output_path}")
+
+    @property
+    def fig(self) -> plt.Figure:
+        return self._fig

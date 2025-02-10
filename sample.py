@@ -9,6 +9,7 @@ width_1 = 84
 height_1 = 60
 center_z = -10
 
+canvas.dra
 # Draw the upper heart curves
 canvas.draw_function(
     "sqrt(1-x)",

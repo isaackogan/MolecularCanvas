@@ -68,7 +68,7 @@ canvas.save(name="02/14", output_path="./outputs/0214.pdb", scale=0.1, orientati
 
 ## Example Output (Matplotlib)
 
-![02/14](./.github/example.png)
+![02/14](./.github/example_1.png)
 
 ## Example Output (RCSB 3d View)
 
@@ -77,3 +77,7 @@ canvas.save(name="02/14", output_path="./outputs/0214.pdb", scale=0.1, orientati
 ## Example Output (Nanome VR)
 
 ![img.png](./.github/example_3.jpg)
+
+## Example Output (running ./MolecularCanvas/paint.py)
+
+![img.png](./.github/example2_1.png)
